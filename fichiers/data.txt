@@ -1,0 +1,7 @@
+, pommes , poires, bananes
+janvier, 12, 5, 9
+février, 17, 18, 8
+mars, 16, 7, 10
+avril, 10, 3, 17
+mai, 12, 9, 12
+juin, 15, 5, 5
