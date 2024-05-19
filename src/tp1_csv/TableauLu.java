@@ -1,61 +1,33 @@
 package tp1_csv;
 import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class TableauLu {
-	private String [] entetesLignes;
-	private String [] entetesColonnes;
-	private int [][] contenu;
-	private int nombreLignes;
-	
-	
-	public TableauLu() {
-        entetesLignes = null;
-        entetesColonnes = null;
-        contenu = null;
-        nombreLignes = 0;
+	private List<String> entetesLignes;
+    private List<String> entetesColonnes;
+    private List<List<Integer>> contenu;
+
+    public TableauLu() {
+        entetesLignes = new ArrayList<>();
+        entetesColonnes = new ArrayList<>();
+        contenu = new ArrayList<>();
     }
 	
 	
-	public void addEntetesLigne(String[] ligneEntetes) {
-        entetesLignes = ligneEntetes;
+    public void addEntetesLigne(String entete) {
+        entetesLignes.add(entete);
     }
 
-    public void addEntetesColonne(String[] colonneEntetes) {
-        entetesColonnes = colonneEntetes;
+    public void addEntetesColonne(String entete) {
+
+        entetesColonnes.add(entete);
     }
-	
-    public void addLignes(String[] contenuEnCours) {
-    	if (contenu == null) {
 
-    		contenu = new int[1][contenuEnCours.length];
-    		
-        } else {
-        	if (contenuEnCours.length != entetesColonnes.length) {
-                throw new IllegalArgumentException("La longueur de la ligne de données ne correspond pas au nombre d'entêtes de colonne.");
-            }
-        	
-            int[][] nouveauContenu = new int[nombreLignes + 1][contenuEnCours.length];
-            for (int i = 0; i < nombreLignes; i++) {
-                for (int j = 0; j < contenu[i].length; j++) {
-                    nouveauContenu[i][j] = contenu[i][j];
-                }
-            }
-            contenu = nouveauContenu;
-        }
-
-        for (int i = 0; i < contenuEnCours.length; i++) {
-            if (!contenuEnCours[i].trim().isEmpty()) {
-                try {
-                    contenu[nombreLignes][i] = Integer.parseInt(contenuEnCours[i].trim());
-                } catch (NumberFormatException e) {
-                        
-                }
-            }
-        }
-        nombreLignes++;
-	}
-	
+    public void addContenu(List<Integer> contenus) {
+        contenu.add(contenus);
+    }
 	
 	
 	public static TableauLu lireFichierCSV(String chemin) throws FileNotFoundException {
@@ -65,71 +37,58 @@ public class TableauLu {
 		
 			File file = new File(chemin);
 			Scanner scanFichier = new Scanner(file);
-			
+			 
+			String ligneActuelle = scanFichier.nextLine();
+		    String[] ligneActuelleSplit = ligneActuelle.split(",");
+		    
+		    int nombreDeColonne = ligneActuelleSplit.length - 1;
+		    
+		     
+		    for (int i = 0; i < (nombreDeColonne); i++) {
+		    	String valeurString = ligneActuelleSplit[i + 1].trim();
+		        tableau.addEntetesColonne(valeurString);
+		    }
+		        
+	        
+		    while (scanFichier.hasNextLine()) {
+	            ligneActuelle = scanFichier.nextLine();
+	            ligneActuelleSplit = ligneActuelle.split(",");
 
-			 String entetesLigne = scanFichier.nextLine();
-			 String[] entetesColonneArray = entetesLigne.split(",");
-			 tableau.addEntetesColonne(entetesColonneArray);
-			 tableau.addEntetesLigne(new String[entetesColonneArray.length]);
-			    
-	        int nombreLignes = 0;
-            
-	        while (scanFichier.hasNextLine()) {
-	            String line = scanFichier.nextLine();
-	            String[] ligneDeCol = line.split(",");
-	            
-	            if (nombreLignes == 0) {
-	                
-	            	for (int i = 0; i < ligneDeCol.length; i++) {
-	                    tableau.entetesLignes[i] = ligneDeCol[i];
-	                }
+	            tableau.addEntetesLigne(ligneActuelleSplit[0].trim());
+
+	            List<Integer> contenusLigneList = new ArrayList<>();
+	            for (int i = 0; i < nombreDeColonne; i++) {
+	                String valeurString = ligneActuelleSplit[i + 1].trim();
+	                contenusLigneList.add(Integer.parseInt(valeurString));
 	            }
-
-	            tableau.addLignes(ligneDeCol);
-	            nombreLignes++;
-        }
-	
-
-    scanFichier.close();
-    return tableau;
-}
-	
-	
-	public int getNombreLignes() {
-        return nombreLignes;
-    }
-	
-	public int getNombreCol() {
-        if (entetesLignes != null) {
-            return entetesLignes.length;
-        } else {
-            return 0;
-        }
-    }
-	
-	public String getEnteteLigne(int numLigne) {
-        if (entetesLignes != null && numLigne >= 0 && numLigne < entetesLignes.length) {
-            return entetesLignes[numLigne];
-        } else {
-            throw new IllegalArgumentException("Indice de ligne invalide");
-        }
-    }
-
-	 public String getEnteteCol(int numCol) {
-	        if (entetesColonnes != null && numCol >= 0 && numCol < entetesColonnes.length) {
-	            return entetesColonnes[numCol];
-	        } else {
-	            throw new IllegalArgumentException("Indice de colonne invalide");
+	            tableau.addContenu(contenusLigneList);
 	        }
-	    }
+		    
+		    scanFichier.close();
+	        return tableau;
+
 	
-    public int getContenu(int numLigne, int numCol) {
-        if (contenu != null && numLigne >= 0 && numLigne < contenu.length && numCol >= 0 && numCol < contenu[0].length) {
-            return contenu[numLigne][numCol];
-        } else {
-            throw new IllegalArgumentException("Indice de ligne ou de colonne invalide");
-        }
+}
+	public int getNombreLignes() {
+        return entetesLignes.size();
     }
+
+    public int getNombreCol() {
+        return entetesColonnes.size();
+    }
+
+    public String getEnteteLigne(int numLigne) {
+        return entetesLignes.get(numLigne);
+    }
+
+    public String getEnteteCol(int numCol) {
+        return entetesColonnes.get(numCol);
+    }
+
+    public int getContenu(int numLigne, int numCol) {
+        return contenu.get(numLigne).get(numCol);
+    }
+	
     
     public static void main(String[] args) {
     	
@@ -162,6 +121,7 @@ public class TableauLu {
                 }
                 System.out.println();
             }
+
             
 		} catch (FileNotFoundException e) {
             System.out.println("Le fichier est introuvable.");
