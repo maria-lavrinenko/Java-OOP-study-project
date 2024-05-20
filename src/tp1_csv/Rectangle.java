@@ -1,10 +1,10 @@
 package tp1_csv; 
 
 public class Rectangle extends Forme {
-	private int w;
-	private int h;
+	private double w;
+	private double h;
 	
-	public Rectangle(String type, int x, int y, int w, int h, String couleur) {
+	public Rectangle(String type, double x, double y, double w, double h, String couleur) {
 		super("rect", x, y, couleur);
 		this.w = w;
 		this.h = h;
