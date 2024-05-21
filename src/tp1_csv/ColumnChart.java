@@ -26,19 +26,43 @@ public class ColumnChart {
 		
 	}
 	
-	public static double getScaleIndex(TableauLu data, List<Integer> dataContent) {
+	public double getScaleIndex(TableauLu data, List<Integer> dataContent) {
 		double scaleIndex;
 		
 		int maxN = dataContent.get(0);
 		for (int i = 0; i < dataContent.size(); i++) {
 			maxN = Math.max(maxN, dataContent.get(i));
 		}
-		scaleIndex = 100 / (maxN * 1.0);
+		scaleIndex = axisVert / (maxN * 1.0);
 
 		return scaleIndex;
 	}
 	
 	
+	public double getMarginTitles () {
+		return marginTitles;
+	}
+	
+	public void setmarginTitles (double marginTitles) {
+		this.marginTitles = marginTitles;
+	}
+	
+	
+	public double getmarginCol() {
+		return marginCol;
+	}
+	
+	public void setmarginCol (double marginCol) {
+		this.marginCol = marginCol;
+	}
+	
+	public double getAxisVert() {
+		return axisVert;
+	}
+	
+	public void setAxisVert(double axisVert) {
+		this.axisVert = axisVert;
+	}
 	
 	public ImgSVG generateSVGChart(TableauLu data, int fontSize, String colColor, String textColor) { 
 		
@@ -103,6 +127,8 @@ public class ColumnChart {
 		
 		System.out.println("Rentrez la couleur du texte");
 		String textColor = sc.next();
+		
+		
 		
 
 		ImgSVG newImgSVG = diagrammeCol.generateSVGChart(tableau, 10, colColor, textColor );

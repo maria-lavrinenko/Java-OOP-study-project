@@ -13,6 +13,10 @@ public class Texte extends Forme {
 		this.fontSize = fontSize;
 		
 	}
+	
+	public void setFontSize(int fontSize) {
+		this.fontSize = fontSize;
+	}
 
 	@Override
 	public String toString() {
