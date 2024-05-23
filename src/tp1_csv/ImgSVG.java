@@ -17,14 +17,19 @@ public class ImgSVG {
 		this.formes = formes;
 		
 	}
+//	la methode pour pouvoir modifier les composants du diagramme par la suite
 	
+	public ArrayList<Forme> getObjList() {
+		return formes;
+	}
 	
-	public void saveImgSVG() {
+	public void setObjList(ArrayList<Forme> formes) {
+		this.formes = formes;
+	}
+	
+	public void saveImgSVG(String fileName) {
 		try {
-			Scanner scan = new Scanner(System.in);
-			System.out.println("Entrez le nom de fichier ");
-			String fileName = scan.nextLine();
-			scan.close();
+			
 			
 			PrintWriter pw = new PrintWriter(fileName);
 			pw.println("<?xml version=\"1.0\" encoding=\"utf-8\"?>");

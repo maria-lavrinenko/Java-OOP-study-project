@@ -94,13 +94,13 @@ public class TableauLu {
     	
     	Scanner scanClavier = new Scanner(System.in);
 		
-		
-		System.out.println("Donnez le nom du fichier CSV: ");
+		System.out.println("Entrez le nom du fichier CSV: ");
 		String nomDuFichier = scanClavier.nextLine();
 		
 		scanClavier.close();
 		
-		String cheminFichier = "fichiers/data.txt";
+//		String cheminFichier = "fichiers/data.txt";
+		String cheminFichier = "fichiers/" + nomDuFichier;
 		
 		try {
 			TableauLu tableau = TableauLu.lireFichierCSV(cheminFichier);
@@ -125,6 +125,7 @@ public class TableauLu {
             
 		} catch (FileNotFoundException e) {
             System.out.println("Le fichier est introuvable.");
+            
         }
     }
 

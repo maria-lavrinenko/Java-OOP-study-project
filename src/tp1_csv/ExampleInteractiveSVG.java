@@ -2,7 +2,7 @@ package tp1_csv;
 
 import java.io.*;
 import java.util.*;
-public class InteractiveSVG{
+public class ExampleInteractiveSVG{
 	
 	private Scanner scan;
 	private ArrayList<Forme> formes = new ArrayList<>();
@@ -55,7 +55,7 @@ public class InteractiveSVG{
                 
                 String couleur = saisirCouleur();
                 
-                formes.add(new Cercle("cercle", coords[0], coords[1], radius, couleur));
+                formes.add(new Circle("cercle", coords[0], coords[1], radius));
 			
 			} else if (choix == 2){
 				
@@ -71,9 +71,8 @@ public class InteractiveSVG{
 
                 scan.nextLine();
                 
-                String couleur = saisirCouleur();
                 
-                formes.add(new Rectangle("rectangle", coords[0], coords[1], w, h, couleur));
+                formes.add(new Rectangle("rectangle", coords[0], coords[1], w, h));
 			}
 			
 			else if (choix == 3){
@@ -102,7 +101,7 @@ public class InteractiveSVG{
 	}
 
 	public static void main(String[] args){
-	InteractiveSVG isvg = new InteractiveSVG();
+	ExampleInteractiveSVG isvg = new ExampleInteractiveSVG();
 	isvg.creeImage();
 }
 }
