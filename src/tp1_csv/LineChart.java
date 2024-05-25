@@ -34,7 +34,7 @@ public class LineChart extends AxisCharts{
         double imgHeight = (axisVert * 1.5);
         
         
-        double scaleIndex = getScaleIndex(data, dataContent);
+        double scaleIndex = getScaleIndex(data, dataContent, axisVert);
         ArrayList<Forme> titles = new ArrayList<>();
         ArrayList<Forme> lines = new ArrayList<>();
         

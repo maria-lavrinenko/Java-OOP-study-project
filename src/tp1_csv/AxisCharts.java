@@ -28,9 +28,10 @@ public class AxisCharts {
 	
 	public void setAxisVert(double axisVert) {
 		this.axisVert = axisVert;
+		
 	}
 	
-	public double getScaleIndex(TableauLu data, List<Integer> dataContent) {
+	public double getScaleIndex(TableauLu data, List<Integer> dataContent, double axisVert) {
 		double scaleIndex;
 		
 		int maxN = dataContent.get(0);

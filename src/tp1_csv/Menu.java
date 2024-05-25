@@ -74,17 +74,12 @@ public class Menu {
 		ColumnChart columnChart = new ColumnChart(tableau);
 		LineChart lineChart = new LineChart(tableau);
 		LineWithDotsChart lineDotsChart = new LineWithDotsChart(tableau);
-		ImgSVG newImgSVG;
-		ArrayList<Forme> formesToModif = null;
-		 boolean parametersChanged = false;
+		ImgSVG newImgSVG = null;
+        ArrayList<Forme> formesToModif = null;
+		boolean parametersChanged = false;
 		
 		int currentMenu = 1;
-		String titlesColor = "";
-		String columnColor = "";
-		String lineColor = "";
-		String dotsColor = "";
-		int lineWidth = 0;
-		
+	
 		do {
 		try {
 		
@@ -127,98 +122,28 @@ public class Menu {
 			currentMenu = 4;
 		}
 		else if(choice == 3) {
-			currentMenu = 10;
+
+			displayMenu(10, scan);
 			System.out.println("Paramètres du graphique");
             
             if (selectedCharType == 1) {
-                columnChart = new ColumnChart(tableau);
-                newImgSVG = columnChart.generateSVGChart(tableau);
-                formesToModif = new ArrayList<>(newImgSVG.getObjList());
 
-                System.out.println("1 - La hauteur du graphique: " + columnChart.getAxisVert());
-                System.out.println("2 - La marge des colonnes: " + columnChart.getColMargin());
-                System.out.println("3 - La largeur des colonnes: " + columnChart.getColWidth());
-                
-				for (int i = 0; i < formesToModif.size(); i++) {
-					
-					if (formesToModif.get(i) instanceof Texte) {
-						titlesColor = formesToModif.get(i).getColor();
-					
-					}
-				else if (formesToModif.get(i) instanceof Rectangle) {
-					columnColor = formesToModif.get(i).getColor();
-				}
-					
-			}
-				System.out.println("4 - La couleur des entêtes: " + titlesColor);
-				System.out.println("5 - La couleur des colonnes: " + columnColor);	
-				
-				parametersChanged = (handleParameterChanges(scan, formesToModif, newImgSVG, columnChart, parametersChanged));
-	
-				displayMenu(3, scan);
+                    formesToModif = updateColumnChartParameters(scan, columnChart, tableau);
+                    
+                    parametersChanged = true;
+                    currentMenu = 3;
             }
 			else if (selectedCharType == 2) {
-				
-				lineChart = new LineChart(tableau);
-                newImgSVG = lineChart.generateSVGChart(tableau);
-                formesToModif = new ArrayList<>(newImgSVG.getObjList());
-
-                System.out.println("1 - La hauteur du graphique: " + lineChart.getAxisVert());
-				System.out.println("2 - La marge des points: " + lineChart.getPointMargin());
-				
-				for (int i = 0; i < formesToModif.size(); i++) {
-				
-					if (formesToModif.get(i) instanceof Texte) {
-						titlesColor = formesToModif.get(i).getColor();
-					}
-				
-				else if (formesToModif.get(i) instanceof SimpleLine) {
-					lineColor = formesToModif.get(i).getColor();
-					lineWidth = ((SimpleLine) formesToModif.get(i)).getStrokeWidth();
-					
-				}
-				
-			}
-				System.out.println("3 - La largeur de la ligne: " + lineWidth);
-				System.out.println("4 - La couleur des entêtes: " + titlesColor);
-				System.out.println("5 - La couleur de la ligne: " + lineColor);
-				
-				parametersChanged = (handleParameterChanges(scan, formesToModif, newImgSVG, lineChart, parametersChanged));
-				
+								
+				formesToModif = updateLineChartParameters(scan, lineChart, tableau);
+                parametersChanged = true;
+                currentMenu = 3;
 			}
 			else if (selectedCharType == 3) {
-				
-				lineDotsChart = new LineWithDotsChart(tableau);
-                newImgSVG = lineDotsChart.generateSVGChart(tableau);
-                formesToModif = new ArrayList<>(newImgSVG.getObjList());
-
-            	System.out.println("1 - La hauteur du graphique: " + lineDotsChart.getAxisVert());
-                System.out.println("2 - La marge des points: " + lineDotsChart.getPointMargin());
-				
-				for (int i = 0; i < formesToModif.size(); i++) {
-				
-					if (formesToModif.get(i) instanceof Texte) {
-						titlesColor = formesToModif.get(i).getColor();
-					
-					}
-				else if (formesToModif.get(i) instanceof Circle) {
-					dotsColor = formesToModif.get(i).getColor();
-					
-				}
-				
-				else if (formesToModif.get(i) instanceof SimpleLine) {
-					lineColor = formesToModif.get(i).getColor();
-					lineWidth = ((SimpleLine) formesToModif.get(i)).getStrokeWidth();
-				}
-				
-			}
-				System.out.println("3 - La largeur de la ligne: " + lineWidth);
-				System.out.println("4 - La couleur des entêtes: " + titlesColor);
-				System.out.println("5 - La couleur de la ligne: " + lineColor);
-				System.out.println("6 - La couleur des points: " + dotsColor);	
-				
-				parametersChanged = (handleParameterChanges(scan, formesToModif, newImgSVG, lineDotsChart, parametersChanged));
-//				parametersChanged = true;
+							
+				formesToModif = updateLineWithDotsChartParameters(scan, lineDotsChart, tableau);
+                parametersChanged = true;
+                currentMenu = 3;
 			}
 		}
 		
@@ -227,8 +152,8 @@ public class Menu {
 			String fileName = scan.nextLine();
 			
             if (selectedCharType == 1) {
+            	
                 newImgSVG = columnChart.generateSVGChart(tableau);
-                
             } else if (selectedCharType == 2) {
                 newImgSVG = lineChart.generateSVGChart(tableau);
             } else {
@@ -236,6 +161,8 @@ public class Menu {
                 
             }
             if (parametersChanged) {
+  
+            newImgSVG = columnChart.generateSVGChart(tableau);
             newImgSVG.setObjList(formesToModif);
             }
             newImgSVG.saveImgSVG(fileName);
@@ -245,14 +172,16 @@ public class Menu {
 
 		} catch (IllegalArgumentException e) {
 			System.out.println("Entrée incorrecte (argument)");
+			scan.next();
 			displayMenu(currentMenu, scan);
-			scan.nextLine();
+
 			
 		}
 		catch (InputMismatchException e) {
 			System.out.println("Entrée incorrecte (type)");
+			scan.next();
 			displayMenu(currentMenu, scan);
-			scan.nextLine();
+
 		}
 		
 		} 
@@ -261,110 +190,206 @@ public class Menu {
 		scan.close();
 			
 		}
-	
-	private static boolean handleParameterChanges(Scanner scan, ArrayList<Forme> formesToModif, ImgSVG newImgSVG, AxisCharts chart, boolean parametersChanged)   {
-        try {
-            System.out.print("Votre choix: ");
-            String choiceStr = scan.nextLine();
-            int choiceParam = Integer.parseInt(choiceStr);
 
-            if (choiceParam == 1) {
-            	System.out.println("Rentrez la nouvelle hauteur du graphique: ");
-                int val = scan.nextInt();
-                chart.setAxisVert(val);
-                parametersChanged = true;
+	private static ArrayList<Forme> updateColumnChartParameters(Scanner scan, ColumnChart columnChart, TableauLu tableau) {
+        ImgSVG newImgSVG = columnChart.generateSVGChart(tableau);
+        ArrayList<Forme> formesToModif = new ArrayList<>(newImgSVG.getObjList());
+        String titlesColor = "";
+        String columnColor = "";
+        boolean parametersChanged = false;
+        System.out.println("1 - La hauteur du graphique: " + columnChart.getAxisVert());
+        System.out.println("2 - La marge des colonnes: " + columnChart.getColMargin());
+        System.out.println("3 - La largeur des colonnes: " + columnChart.getColWidth());
+
+        for (int i = 0; i < formesToModif.size(); i ++) {
+            if (formesToModif.get(i) instanceof Texte) {
+            	titlesColor = formesToModif.get(i).getColor();
+                
+            } else if (formesToModif.get(i) instanceof Rectangle) {
+            	columnColor = formesToModif.get(i).getColor();
             }
+        }
+        System.out.println("4 - La couleur des entêtes: " + titlesColor);
+        System.out.println("5 - La couleur des colonnes: " + columnColor);
+        
+        return handleParameterChanges(scan, formesToModif, newImgSVG, columnChart, parametersChanged);
+    }
+
+    private static ArrayList<Forme> updateLineChartParameters(Scanner scan, LineChart lineChart, TableauLu tableau) {
+        ImgSVG newImgSVG = lineChart.generateSVGChart(tableau);
+        ArrayList<Forme> formesToModif = new ArrayList<>(newImgSVG.getObjList());
+        String titlesColor = "";
+        String lineColor = "";
+        int strokeWidth = 0;
+        boolean parametersChanged = false;
+        System.out.println("1 - La hauteur du graphique: " + lineChart.getAxisVert());
+        System.out.println("2 - La marge des points: " + lineChart.getPointMargin());
+
+        for (int i = 0; i < formesToModif.size(); i ++) {
+            if (formesToModif.get(i)  instanceof Texte) {
+            	titlesColor = formesToModif.get(i) .getColor();
+            } else if (formesToModif.get(i)  instanceof SimpleLine) {
+            	lineColor = formesToModif.get(i) .getColor();
+                strokeWidth = ((SimpleLine) formesToModif.get(i) ).getStrokeWidth();
+            }
+        }
+        System.out.println("3 - La largeur de la ligne: " + strokeWidth);
+        System.out.println("4 - La couleur des entêtes: " + titlesColor);
+        System.out.println("5 - La couleur de la ligne: " + lineColor);
+         
+        
+        return handleParameterChanges(scan, formesToModif, newImgSVG, lineChart, parametersChanged);
+    }
+
+    private static ArrayList<Forme> updateLineWithDotsChartParameters(Scanner scan, LineWithDotsChart lineDotsChart, TableauLu tableau) {
+        ImgSVG newImgSVG = lineDotsChart.generateSVGChart(tableau);
+        ArrayList<Forme> formesToModif = new ArrayList<>(newImgSVG.getObjList());
+        String titlesColor = "";
+        String lineColor = "";
+        int strokeWidth = 0;
+        String pointColor = "";
+        boolean parametersChanged = false;
+        System.out.println("1 - La hauteur du graphique: " + lineDotsChart.getAxisVert());
+        System.out.println("2 - La marge des points: " + lineDotsChart.getPointMargin());
+
+        for (Forme forme : formesToModif) {
+            if (forme instanceof Texte) {
+            	titlesColor = forme.getColor();
+                
+            } else if (forme instanceof SimpleLine) {
+            	lineColor = forme.getColor();
+                strokeWidth = ((SimpleLine) forme).getStrokeWidth();
+                
+            } else if (forme instanceof Circle) {
+            	pointColor = forme.getColor();
+                
+            }
+        }
+        System.out.println("3 - La largeur de la ligne: " + strokeWidth);
+        System.out.println("4 - La couleur des entêtes: " + titlesColor);
+        System.out.println("5 - La couleur de la ligne: " + lineColor);
+        System.out.println("6 - La couleur des points: " + pointColor);
+        
+        return handleParameterChanges(scan, formesToModif, newImgSVG, lineDotsChart, parametersChanged);
+    }
+
+	
+    
+    private static ArrayList<Forme> handleParameterChanges(Scanner scan, ArrayList<Forme> formesToModif, ImgSVG newImgSVG, AxisCharts chart, boolean parametersChanged) {
+    	while (true) {
+    		
+    	
+    	System.out.println("Choisissez un paramètre à modifier (0 pour terminer): ");
+    	System.out.print("Votre choix: ");
+    	int choiceParam = scan.nextInt();
+        scan.nextLine(); 
+
+        if (choiceParam == 0) {
+            break;  
+        }
+        
+        if (choiceParam == 1) {
             
-            else if (choiceParam == 2) {
-            	if(chart instanceof ColumnChart) {
-            		System.out.println("Rentrez la nouvelle marge de colonnes: ");
-                    int val = scan.nextInt();
-                    ((ColumnChart) chart).setColMargin(val);
+                System.out.println("Rentrez la nouvelle hauteur du graphique: ");
+                double newAxisHeight = scan.nextDouble();
+                chart.setAxisVert(newAxisHeight);
+                parametersChanged = true;
+        }
+        else if (choiceParam == 2) {
+                if (chart instanceof ColumnChart) {
+                    System.out.println("Rentrez la nouvelle marge de colonnes: ");
+                    double colMargin = scan.nextDouble();
+                   
+                    ((ColumnChart) chart).setColMargin(colMargin);
                     parametersChanged = true;
-            	} else if (chart instanceof LineChart) {
-            		int val = scan.nextInt();
-                    ((LineChart) chart).setPointMargin(val);
-                    parametersChanged = true;
+                } else if (chart instanceof LineChart) {
+                    System.out.println("Rentrez la nouvelle marge des points: ");
+                    double pointMargin = scan.nextDouble();
+                    
+                    ((LineChart) chart).setPointMargin(pointMargin);
                 } else if (chart instanceof LineWithDotsChart) {
                     System.out.println("Rentrez la nouvelle marge des points: ");
-                    int val = scan.nextInt();
-                    ((LineWithDotsChart) chart).setPointMargin(val);
-                    parametersChanged = true;
-            	}
-            }
-             
-
-             else if (choiceParam == 3) {
-                if (chart instanceof ColumnChart) {
-                    System.out.println("Rentrez la nouvelle largeur des colonnes: ");
-                    int val = scan.nextInt();
-                    ((ColumnChart) chart).setColWidth(val);
-                    parametersChanged = true;
-                } else if (chart instanceof LineChart || chart instanceof LineWithDotsChart) {
-                    System.out.println("Rentrez la nouvelle largeur de la ligne: ");
-                    int val = scan.nextInt();
-                    for ( int i = 0; i < formesToModif.size(); i ++) {
-                    	if (formesToModif.get(i) instanceof SimpleLine) {
-                    		((SimpleLine) formesToModif.get(i)).setStrokeWidth(val);
-                        }
-                    }                   
-                    parametersChanged = true;
+                    double pointMargin = scan.nextDouble();
+                    
+                    ((LineWithDotsChart) chart).setPointMargin(pointMargin);
                 }
-
-            } else if (choiceParam == 4) {
+        }
+        else if (choiceParam == 3) {
+            if (chart instanceof ColumnChart) {
+                System.out.println("Rentrez la nouvelle largeur de colonnes: ");
+                double colWidth = scan.nextInt();
                 
-                    System.out.println("Rentrez la nouvelle couleur pour les entêtes: ");
-                    String val = scan.next();
-                    for ( int i = 0; i < formesToModif.size(); i ++) {
-                    	if (formesToModif.get(i) instanceof Texte) {
-                    		((Texte) formesToModif.get(i)).setColor(val);
+                ((ColumnChart) chart).setColWidth(colWidth);
+            } else if (chart instanceof LineChart) {
+                System.out.println("Rentrez la nouvelle largeur de la ligne: ");
+                int lineWidth = scan.nextInt();
+                
+                for (int i = 0; i < formesToModif.size(); i ++) {
+                    if (formesToModif.get(i)  instanceof SimpleLine) {
+                    	((SimpleLine) formesToModif.get(i)).setStrokeWidth(lineWidth); 
+                    }
+                }
+                
+            } else if (chart instanceof LineWithDotsChart) {
+            	System.out.println("Rentrez la nouvelle largeur de la ligne: ");
+                int lineWidth = scan.nextInt();
+                
+                for (int i = 0; i < formesToModif.size(); i ++) {
+                    if (formesToModif.get(i)  instanceof SimpleLine) {
+                    	((SimpleLine) formesToModif.get(i)).setStrokeWidth(lineWidth); 
+                    }
+                }
+            }
+        } else if (choiceParam == 4) {
+            	System.out.println("Rentrez la nouvelle couleur des entêtes: ");
+            	String titlesColor = scan.nextLine();
+
+            	for (int i = 0; i < formesToModif.size(); i ++) {
+                    if (formesToModif.get(i)  instanceof Texte) {
+                    	((Texte) formesToModif.get(i)).setColor(titlesColor); 
+                    }
+                }
+            }
+            else if (choiceParam == 5) {
+            	if (chart instanceof ColumnChart) {
+                    System.out.println("Rentrez la nouvelle couleur des colonnes: ");
+                    String colColor = scan.nextLine();
+
+                    for (int i = 0; i < formesToModif.size(); i ++) {
+                        if (formesToModif.get(i)  instanceof Rectangle) {
+                        	((Rectangle) formesToModif.get(i)).setColor(colColor); 
                         }
                     }
-                    
-                    parametersChanged = true;
-                    
-                } else if (choiceParam == 5) {
-                	if(chart instanceof ColumnChart) {
-                		System.out.println("Rentrez la nouvelle couleur des colonnes: ");
-                		String val = scan.nextLine();
-                		for ( int i = 0; i < formesToModif.size(); i ++) {
-                        	if (formesToModif.get(i) instanceof Rectangle) {
-                        		((Rectangle) formesToModif.get(i)).setColor(val);
-                            }
+                   
+                } else {
+                    System.out.println("Rentrez la nouvelle couleur de la ligne: ");
+                    String lineColor = scan.nextLine();
+                  
+                    for (int i = 0; i < formesToModif.size(); i ++) {
+                        if (formesToModif.get(i)  instanceof SimpleLine) {
+                        	((SimpleLine) formesToModif.get(i)).setColor(lineColor); 
                         }
- 
-                        parametersChanged = true;
-                	} else if (chart instanceof LineChart || chart instanceof LineWithDotsChart) {
-                		System.out.println("Rentrez la nouvelle couleur de la ligne: ");
-                		String val = scan.nextLine();
-                		for ( int i = 0; i < formesToModif.size(); i ++) {
-                        	if (formesToModif.get(i) instanceof SimpleLine) {
-                        		((SimpleLine) formesToModif.get(i)).setColor(val);
-                            }
-                        }
- 
-                        parametersChanged = true;
-                	}
+                    }
+                
                 }
-                else if (choiceParam == 6) {
-                	if (chart instanceof LineWithDotsChart) {
-                		System.out.println("Rentrez la nouvelle couleur des points: ");
-                		String val = scan.nextLine();
-                		for ( int i = 0; i < formesToModif.size(); i ++) {
-                        	if (formesToModif.get(i) instanceof Circle) {
-                        		((Circle) formesToModif.get(i)).setColor(val);
-                            }
+            }
+            else if (choiceParam == 6) {
+            	if (chart instanceof LineWithDotsChart) {
+                    System.out.println("Rentrez la nouvelle couleur des points: ");
+                    String pointColor = scan.nextLine();
+                    
+                    for (int i = 0; i < formesToModif.size(); i ++) {
+                        if (formesToModif.get(i)  instanceof Circle) {
+                        	((Circle) formesToModif.get(i)).setColor(pointColor); 
                         }
-
-                        parametersChanged = true;
-                	}
-                }
-            
-        } catch (NumberFormatException e) {
-            System.out.println("Entrée incorrecte (type)");
-        } 
-        
-        return parametersChanged;
-        
-	}
+                    }
+            }
+         
+    }
+            else {
+                System.out.println("Choix invalide. Veuillez réessayer.");
+            }
+        }
+    	return formesToModif;
+    }
 }

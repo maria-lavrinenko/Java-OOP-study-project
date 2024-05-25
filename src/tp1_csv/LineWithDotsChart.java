@@ -25,7 +25,7 @@ public class LineWithDotsChart extends LineChart{
         double imgHeight = (axisVert * 1.5);
         
         
-        double scaleIndex = getScaleIndex(data, dataContent);
+        double scaleIndex = getScaleIndex(data, dataContent, axisVert);
         ArrayList<Forme> points = new ArrayList<>();
         ArrayList<Forme> titles = new ArrayList<>();
         ArrayList<Forme> lines = new ArrayList<>();

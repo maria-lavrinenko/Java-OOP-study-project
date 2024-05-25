@@ -1,9 +1,8 @@
 package tp1_csv;
 
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
+
 
 public class ColumnChart extends AxisCharts {
 
@@ -44,7 +43,7 @@ public class ColumnChart extends AxisCharts {
 		   
 //		ajoute les rectangles de donnees 
 		
-        double scaleIndex = getScaleIndex(data, dataContent);
+        double scaleIndex = getScaleIndex(data, dataContent, axisVert);
         ArrayList<Forme> rects = new ArrayList<>();
         ArrayList<Forme> titles = new ArrayList<>();
         
@@ -74,58 +73,6 @@ public class ColumnChart extends AxisCharts {
 		return imgSVG;
         
 	}
-	
-	
-//	public static void main(String[] args) throws FileNotFoundException {
-//		String cheminFichier = "fichiers/data.txt";
-//		TableauLu tableau = TableauLu.lireFichierCSV(cheminFichier);
-//		ColumnChart diagrammeCol = new ColumnChart(tableau);
-//		
-//		Scanner scan = new Scanner(System.in);
-//		System.out.println("Entrez le nom de fichier ");
-//		String fileName = scan.nextLine();
-//		
-//
-//		
-////		System.out.println("Rentrez la couleur du texte");
-////		String textColor = sc.next();
-////		
-//
-//		ImgSVG newImgSVG = diagrammeCol.generateSVGChart(tableau);
-//		newImgSVG.saveImgSVG(fileName);
-//		System.out.println("OK");
-//		
-//		System.out.println("Rentrez la couleur des colonnes");
-//		String colColor = scan.nextLine();
-//		
-//		System.out.println("Rentrez la couleur des entetes");
-//		String titleColor = scan.nextLine();
-//		
-//		System.out.println("Rentrez la couleur des axes");
-//		String axisColor = scan.nextLine();
-//		
-//		scan.close();
-//		
-//		
-//		
-//		ArrayList<Forme> formesToModif = new ArrayList<>(newImgSVG.getObjList());
-//		for (int i = 0; i < formesToModif.size(); i++) {
-//			if (formesToModif.get(i) instanceof Rectangle) {
-//				formesToModif.get(i).setColor(colColor);
-//				
-//			} else if (formesToModif.get(i) instanceof Texte) {
-//				formesToModif.get(i).setColor(titleColor);
-//				
-//			} else if (formesToModif.get(i) instanceof AxisLine) {
-//				formesToModif.get(i).setColor(axisColor);
-//		}
-//		}
-//		newImgSVG.setObjList(formesToModif);
-//		newImgSVG.saveImgSVG(fileName);
-//		
 		
-		
-	
-	
 	
 }
