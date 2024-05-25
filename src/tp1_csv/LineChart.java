@@ -1,9 +1,8 @@
 package tp1_csv;
 
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
+
 
 public class LineChart extends AxisCharts{
 	
@@ -69,21 +68,4 @@ public class LineChart extends AxisCharts{
         return imgSVG;
 	}
 	
-	public static void main(String[] args) throws FileNotFoundException {
-		String cheminFichier = "fichiers/data.txt";
-		TableauLu tableau = TableauLu.lireFichierCSV(cheminFichier);
-		LineChart diagrammeCourbes = new LineChart(tableau);
-		
-		Scanner scan = new Scanner(System.in);
-		System.out.println("Entrez le nom de fichier ");
-		String fileName = scan.nextLine();
-		
-
-		
-//		System.out.println("Rentrez la couleur du texte");
-//		String textColor = sc.next();
-//		
-
-		ImgSVG newImgSVG = diagrammeCourbes.generateSVGChart(tableau);
-		newImgSVG.saveImgSVG(fileName);
-}}
+}
