@@ -10,6 +10,13 @@ public class Rectangle extends Forme {
 		this.h = h;
 		
 	}
+	public double getColWidth() {
+		return this.w;
+	}
+	
+	public void setColWidth(double colWidth) {
+		this.w = colWidth;
+	}
 	
 	@Override
 	public String toString() {

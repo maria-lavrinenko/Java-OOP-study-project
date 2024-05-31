@@ -1,13 +1,18 @@
 package tp1_csv;
 
 import java.util.ArrayList;
+import java.util.InputMismatchException;
 import java.util.List;
+import java.util.Scanner;
 
 
 public class ColumnChart extends AxisCharts {
 
 	private double colMargin = 5;
 	private double colWidth = 20;
+    
+    private String titlesColor = "black";
+    private String columnColor = "black";
 	
 	public ColumnChart (TableauLu data) {
 		super(data);
@@ -21,13 +26,64 @@ public class ColumnChart extends AxisCharts {
 		this.colMargin = colMargin;
 	}
 	
-	public double getColWidth() {
-		return colWidth;
-	}
-	
-	public void setColWidth (double colWidth) {
-		this.colWidth = colWidth;
-	}
+
+	  public double getColWidth() {
+	        return colWidth;
+	    }
+	  public void setColWidth(double colWidth) {
+	        this.colWidth = colWidth;
+	    }
+	    
+	   
+	    public String getTitlesColor() {
+	        return titlesColor;
+	    }
+	    public void setTitlesColor(String titlesColor) {
+	        this.titlesColor = titlesColor;
+	    }
+	    
+	    public String getColumnColor() {
+	        return columnColor;
+	    }
+	    public void setColumnColor(String columnColor) {
+	        this.columnColor = columnColor;
+	    }
+	    
+
+	    
+	public void updateParameters(Scanner scan) {
+        System.out.println("1 - La hauteur du graphique: " + getAxisVert());
+        System.out.println("2 - La marge des colonnes: " + getColMargin());
+        System.out.println("3 - La largeur des colonnes: " + getColWidth());
+        System.out.println("4 - La couleur des entetes: " + getTitlesColor());
+        System.out.println("5 - La couleur des colonnes: " + getColumnColor());
+        
+        System.out.println("Choisissez un paramètre à modifier (0 pour terminer): ");
+        int choice = scan.nextInt();
+        scan.nextLine();
+        try {
+        
+        if (choice == 1) {
+            System.out.println("Rentrez la nouvelle hauteur du graphique: ");
+            this.setAxisVert(scan.nextDouble());
+        } else if (choice == 2) {
+            System.out.println("Rentrez la nouvelle marge de colonnes: ");
+            setColMargin(scan.nextDouble());
+        } else if (choice == 3) {
+        	System.out.println("Rentrez la nouvelle largeur des colonnes: ");
+        	setColWidth(scan.nextDouble());
+        } else if (choice == 4) {
+        	System.out.println("Rentrez la nouvelle couleur des entêtes: ");
+        	setTitlesColor(scan.nextLine());
+        } else if (choice == 5) {
+        	System.out.println("Rentrez la nouvelle couleur des colonnes: ");
+        	setColumnColor(scan.nextLine());
+        };
+        } catch (InputMismatchException e) {
+			System.out.println("Entrée incorrecte (type)");
+			scan.next();
+        }
+    }
 	
 	public ImgSVG generateSVGChart(TableauLu data) { 
 		
@@ -43,7 +99,7 @@ public class ColumnChart extends AxisCharts {
 		   
 //		ajoute les rectangles de donnees 
 		
-        double scaleIndex = getScaleIndex(data, dataContent, axisVert);
+        double scaleIndex = getScaleIndex(data, dataContent);
         ArrayList<Forme> rects = new ArrayList<>();
         ArrayList<Forme> titles = new ArrayList<>();
         
@@ -62,13 +118,12 @@ public class ColumnChart extends AxisCharts {
         	rectX = rectX + colWidth + (colMargin * 2) ;
 }
         
-        	
-        ArrayList<Forme> objectsSVG = new ArrayList<>();
+        ArrayList<Forme> coordinates = new ArrayList<>(setAxisLines(imgWidth));
         
-        objectsSVG.addAll(setAxisLines(imgWidth));
-        objectsSVG.addAll(rects);
-        objectsSVG.addAll(titles);
-        ImgSVG imgSVG = new ImgSVG (imgWidth, imgHeight, objectsSVG);
+        ImgSVG imgSVG = new ImgSVG (imgWidth, imgHeight, coordinates);
+        imgSVG.addForms(rects);
+        imgSVG.addForms(titles);
+        
         
 		return imgSVG;
         

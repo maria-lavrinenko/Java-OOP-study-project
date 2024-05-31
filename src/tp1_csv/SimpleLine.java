@@ -2,7 +2,7 @@ package tp1_csv;
 
 public class SimpleLine extends AxisLine{
 	
-	private int strokeWidth = 1;
+	private double strokeWidth = 1;
 	
 	public SimpleLine(String type, double x1, double y1, double x2, double y2) {
 		super("line", x1, y1, x2, y2);
@@ -10,7 +10,7 @@ public class SimpleLine extends AxisLine{
 	
 	@Override
 	
-	public void setStrokeWidth(int strokeWidth) {
+	public void setStrokeWidth(double strokeWidth) {
 		this.strokeWidth = strokeWidth;
 	}
 	

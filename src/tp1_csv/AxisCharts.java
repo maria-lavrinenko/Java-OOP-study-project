@@ -9,6 +9,8 @@ public class AxisCharts {
 	protected double marginImg = 10;
 	protected double marginTitles = 15;
 	protected TableauLu data;
+	private double imgWidth;
+    private double imgHeight;
 	
 	public AxisCharts(TableauLu data) {
 		this.data = data;
@@ -26,12 +28,21 @@ public class AxisCharts {
 		return axisVert;
 	}
 	
+	
 	public void setAxisVert(double axisVert) {
 		this.axisVert = axisVert;
+		this.setAxisLines(imgWidth);
 		
 	}
+	 public double getImgWidth() {
+	        return imgWidth;
+	    }
+
+	 public double getImgHeight() {
+	        return imgHeight;
+	    }
 	
-	public double getScaleIndex(TableauLu data, List<Integer> dataContent, double axisVert) {
+	public double getScaleIndex(TableauLu data, List<Integer> dataContent) {
 		double scaleIndex;
 		
 		int maxN = dataContent.get(0);
@@ -43,10 +54,12 @@ public class AxisCharts {
 		return scaleIndex;
 	}
 	
+	
 	public ArrayList<AxisLine> setAxisLines(double imgWidth) {
 		
 		AxisLine xAxis = new AxisLine("line", marginImg, (marginImg + axisVert), (imgWidth - marginImg), (marginImg + axisVert));
 		AxisLine yAxis = new AxisLine("line", marginImg, marginImg, marginImg, (marginImg + axisVert));
+		
 		ArrayList<AxisLine> coordinates = new ArrayList<AxisLine>();
 		coordinates.add(yAxis);
 		coordinates.add(xAxis);

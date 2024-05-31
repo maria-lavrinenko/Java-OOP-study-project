@@ -4,7 +4,7 @@ public class AxisLine extends Forme {
 	
 	protected double x2;
 	protected double y2;
-	private int strokeWidth = 2;
+	private double strokeWidth = 2;
 
 	public AxisLine(String type, double x, double y, double x2, double y2) {
 		super("line", x, y);
@@ -12,10 +12,16 @@ public class AxisLine extends Forme {
 		this.y2 = y2;
 		
 	}
-	public int getStrokeWidth() {
+	public void setVerticalAxis(double axisVert) {
+        if (x == x2) { 
+            this.y2 = axisVert + y; 
+        }
+    }
+	
+	public double getStrokeWidth() {
 		return strokeWidth;
 	}
-	public void setStrokeWidth(int strokeWidth) {
+	public void setStrokeWidth(double strokeWidth) {
 		this.strokeWidth = strokeWidth;
 	}
 	

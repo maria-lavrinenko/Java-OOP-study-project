@@ -2,14 +2,70 @@ package tp1_csv;
 
 
 import java.util.ArrayList;
+import java.util.InputMismatchException;
 import java.util.List;
+import java.util.Scanner;
 
 
 public class LineWithDotsChart extends LineChart{
 	
+	protected String dotsColor;
+	
 	public LineWithDotsChart(TableauLu data) {
-		super(data);
-	}
+        super(data);
+    }
+
+    public String getDotsColor() {
+        return dotsColor;
+    }
+
+    public void setDotsColor(String dotsColor) {
+        this.dotsColor = dotsColor;
+    }
+    
+    @Override
+	public void updateParameters(Scanner scan) {
+    	
+    	System.out.println("1 - La hauteur du graphique: " + getAxisVert());
+        System.out.println("2 - La marge des points: " + getPointMargin());
+        System.out.println("3 - La largeur de la ligne: " + getStrokeWidth());
+        System.out.println("4 - La couleur des entêtes: " + getTitlesColor());
+        System.out.println("5 - La couleur de la ligne: " + getLineColor());
+        System.out.println("6 - La couleur des points: " + getDotsColor());
+        
+        System.out.println("Choisissez un paramètre à modifier (0 pour terminer): ");
+        int choice = scan.nextInt();
+        scan.nextLine();
+
+        try {
+        	if (choice == 1) {
+        
+            System.out.println("Rentrez la nouvelle hauteur du graphique: ");
+            setAxisVert(scan.nextDouble());
+        } else if (choice == 2) {
+            System.out.println("Rentrez la nouvelle marge des points: ");
+            setPointMargin(scan.nextDouble());
+        } else if (choice == 3) {
+        	System.out.println("Rentrez la nouvelle largeur de la ligne: ");
+            setStrokeWidth(scan.nextDouble());
+        }  else if (choice == 4) {
+        	System.out.println("Rentrez la nouvelle couleur des entêtes: ");
+        	setTitlesColor(scan.nextLine());
+        } else if (choice == 5) {
+        	System.out.println("Rentrez la nouvelle couleur de la ligne: ");
+        	setLineColor(scan.nextLine());
+        } else if (choice == 6) {
+        	System.out.println("Rentrez la nouvelle couleur des points: ");
+        	setDotsColor(scan.nextLine());
+        }
+    }
+     catch (InputMismatchException e) {
+		System.out.println("Entrée incorrecte (type)");
+		scan.next();
+    }
+}
+ 
+    
 	
 	@Override
 	
@@ -25,7 +81,7 @@ public class LineWithDotsChart extends LineChart{
         double imgHeight = (axisVert * 1.5);
         
         
-        double scaleIndex = getScaleIndex(data, dataContent, axisVert);
+        double scaleIndex = getScaleIndex(data, dataContent);
         ArrayList<Forme> points = new ArrayList<>();
         ArrayList<Forme> titles = new ArrayList<>();
         ArrayList<Forme> lines = new ArrayList<>();
@@ -52,13 +108,13 @@ public class LineWithDotsChart extends LineChart{
         	varX1 += pointMargin ;
         	
 }
-        ArrayList<Forme> objectsSVG = new ArrayList<>();
         
-        objectsSVG.addAll(setAxisLines(imgWidth));
-        objectsSVG.addAll(lines);
-        objectsSVG.addAll(points);
-        objectsSVG.addAll(titles);
-        ImgSVG imgSVG = new ImgSVG (imgWidth, imgHeight, objectsSVG);
+  ArrayList<Forme> coordinates = new ArrayList<>(setAxisLines(imgWidth));
+        
+        ImgSVG imgSVG = new ImgSVG (imgWidth, imgHeight, coordinates);
+        imgSVG.addForms(lines);
+        imgSVG.addForms(points);
+        imgSVG.addForms(titles);
 		
         return imgSVG;
 	} 
