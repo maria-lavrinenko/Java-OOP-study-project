@@ -68,16 +68,16 @@ public class ColumnChart extends AxisCharts {
             this.setAxisVert(scan.nextDouble());
         } else if (choice == 2) {
             System.out.println("Rentrez la nouvelle marge de colonnes: ");
-            setColMargin(scan.nextDouble());
+            this.setColMargin(scan.nextDouble());
         } else if (choice == 3) {
         	System.out.println("Rentrez la nouvelle largeur des colonnes: ");
-        	setColWidth(scan.nextDouble());
+        	this.setColWidth(scan.nextDouble());
         } else if (choice == 4) {
         	System.out.println("Rentrez la nouvelle couleur des entêtes: ");
-        	setTitlesColor(scan.nextLine());
+        	this.setTitlesColor(scan.nextLine());
         } else if (choice == 5) {
         	System.out.println("Rentrez la nouvelle couleur des colonnes: ");
-        	setColumnColor(scan.nextLine());
+        	this.setColumnColor(scan.nextLine());
         };
         } catch (InputMismatchException e) {
 			System.out.println("Entrée incorrecte (type)");

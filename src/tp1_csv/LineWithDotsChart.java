@@ -9,7 +9,7 @@ import java.util.Scanner;
 
 public class LineWithDotsChart extends LineChart{
 	
-	protected String dotsColor;
+	protected String dotsColor = "black";
 	
 	public LineWithDotsChart(TableauLu data) {
         super(data);
@@ -41,22 +41,22 @@ public class LineWithDotsChart extends LineChart{
         	if (choice == 1) {
         
             System.out.println("Rentrez la nouvelle hauteur du graphique: ");
-            setAxisVert(scan.nextDouble());
+            this.setAxisVert(scan.nextDouble());
         } else if (choice == 2) {
             System.out.println("Rentrez la nouvelle marge des points: ");
-            setPointMargin(scan.nextDouble());
+            this.setPointMargin(scan.nextDouble());
         } else if (choice == 3) {
         	System.out.println("Rentrez la nouvelle largeur de la ligne: ");
-            setStrokeWidth(scan.nextDouble());
+            this.setStrokeWidth(scan.nextDouble());
         }  else if (choice == 4) {
         	System.out.println("Rentrez la nouvelle couleur des entêtes: ");
-        	setTitlesColor(scan.nextLine());
+        	this.setTitlesColor(scan.nextLine());
         } else if (choice == 5) {
         	System.out.println("Rentrez la nouvelle couleur de la ligne: ");
-        	setLineColor(scan.nextLine());
+        	this.setLineColor(scan.nextLine());
         } else if (choice == 6) {
         	System.out.println("Rentrez la nouvelle couleur des points: ");
-        	setDotsColor(scan.nextLine());
+        	this.setDotsColor(scan.nextLine());
         }
     }
      catch (InputMismatchException e) {
@@ -93,7 +93,9 @@ public class LineWithDotsChart extends LineChart{
         for (int i = 0; i < dataContent.size(); i ++) {
         	double varX1FromXtoPoint = dataContent.get(i) * scaleIndex;
         	double varY1 = marginImg + (axisVert - varX1FromXtoPoint);
-        	points.add(new Circle("circle", varX1, varY1, 3));
+        	Circle point = new Circle("circle", varX1, varY1, 3);
+            point.setColor(dotsColor);  
+            points.add(point);
         	
 //        	ajoute les lignes entre les points
         	
