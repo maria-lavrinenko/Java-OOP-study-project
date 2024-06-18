@@ -48,6 +48,8 @@ public class LineChart extends AxisCharts{
 	public void setLineColor(String lineColor) {
 		this.lineColor = lineColor;
 	}
+
+	@Override
 	public void updateParameters(Scanner scan) {
 		System.out.println("1 - La hauteur du graphique: " + getAxisVert());
 		System.out.println("2 - La marge des points: " + getPointMargin());
@@ -84,8 +86,7 @@ public class LineChart extends AxisCharts{
 
 	}
 
-
-
+	@Override
 	public ImgSVG generateSVGChart(TableauLu data) {
 
 		List<Integer> dataContent = new ArrayList<>();

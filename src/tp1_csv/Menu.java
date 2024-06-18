@@ -1,7 +1,6 @@
 package tp1_csv;
 
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
@@ -82,10 +81,8 @@ public class Menu {
 			return choice >= 0 && choice <= 1;
 		} else if (menu == 2) {
 			return choice >= 0 && choice <= 2;
-		} else if (menu == 3) {
+		} else if (menu == 3 || menu == 4) {
 			return choice >= 0 && choice <= 4;
-		} else if (menu == 4) {
-			return choice >= 0 && choice <= 3;
 		} else if (menu == 10) {
 			return choice == 0;
 		} else {

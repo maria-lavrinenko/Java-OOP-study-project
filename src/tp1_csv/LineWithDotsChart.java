@@ -68,7 +68,6 @@ public class LineWithDotsChart extends LineChart{
 
 
 	@Override
-
 	public ImgSVG generateSVGChart(TableauLu data) {
 
 		List<Integer> dataContent = new ArrayList<>();
@@ -123,4 +122,6 @@ public class LineWithDotsChart extends LineChart{
 
 
 }
+	
+
 	
