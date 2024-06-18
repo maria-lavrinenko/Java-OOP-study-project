@@ -7,17 +7,20 @@ import java.util.Scanner;
 
 public class Menu {
 
-	static int selectedCharType = 0;
-	
+	static int selectedCharType;
+	static boolean parametersChanged = false;
+	static TableauLu tableau;
+	static AxisCharts axisChart = null;
+
 	public static void displayMenu(int menu, Scanner scan) throws FileNotFoundException {
-		
+
 		if (menu == 0) {
 			System.out.println("Fin de programme");
 		}
 		if (menu == 10) {
 			System.out.println("0 - quitter");
 		}
-		
+
 		if (menu == 1) {
 			displayMenu(10, scan);
 			System.out.println("1 - lire les données");
@@ -26,12 +29,12 @@ public class Menu {
 			displayMenu(1, scan);
 			System.out.println("2 - choisir le type de graphique");
 		}
-		
+
 		if (menu == 3) {
 			displayMenu(2, scan);
 			System.out.println("3 - modifier les paramètres");
 			System.out.println("4 - créer le fichier");
-			
+
 		}
 		if (menu == 4) {
 
@@ -41,160 +44,144 @@ public class Menu {
 			displayMenu(10, scan);
 			System.out.print("Votre choix: ");
 
-			 String choiceStr = scan.nextLine(); 
+			String choiceStr = scan.nextLine(); 
 
-		        try {
-		            int choice = Integer.parseInt(choiceStr);  
+			try {
+				int choice = Integer.parseInt(choiceStr);  
 
-		            if (choice == 1) {
-		                selectedCharType = 1;
-		                displayMenu(3, scan);
-		                
-		            } else if (choice == 2) {
-		                selectedCharType = 2;
-		                displayMenu(3, scan);
-		            } else if (choice == 3) {
-		            	selectedCharType = 3;
-		            	displayMenu(3, scan);
-		            } else if(choice == 0) {
-		            	displayMenu(2, scan);
-		            }
-		            
-		        } catch (NumberFormatException e) {
-		            System.out.println("Entrée incorrecte (type)");
-		            displayMenu(menu, scan); 
-		            System.out.print("Votre choix: ");
-		        }
+				if (choice == 1 || choice == 2 || choice == 3) {
+					selectedCharType = choice;
+
+					if (selectedCharType == 1) {
+						axisChart = new ColumnChart(tableau);
+					}
+					else if (selectedCharType == 2) {
+						axisChart = new LineChart(tableau);
+					}
+					else if (selectedCharType == 3) {
+						axisChart = new LineWithDotsChart(tableau);
+					}
+					displayMenu(3, scan);
+				} else if(choice == 0) {
+					displayMenu(2, scan);
+				} else {
+					throw new IllegalArgumentException();
+				}
+
+			} catch (NumberFormatException e) {
+				System.out.println("Entrée incorrecte (type)");
+				displayMenu(menu, scan); 
+				System.out.print("Votre choix: ");
+			}
 		}
-		
+
+	}
+
+	private static boolean isValidChoice(int menu, int choice) {
+		if (menu == 1) {
+			return choice >= 0 && choice <= 1;
+		} else if (menu == 2) {
+			return choice >= 0 && choice <= 2;
+		} else if (menu == 3) {
+			return choice >= 0 && choice <= 4;
+		} else if (menu == 4) {
+			return choice >= 0 && choice <= 3;
+		} else if (menu == 10) {
+			return choice == 0;
+		} else {
+			return false;
+		}
 	}
 
 	public static void main(String[] args) throws FileNotFoundException {
 		Scanner scan = new Scanner(System.in);
-		TableauLu tableau = new TableauLu();
-		ColumnChart columnChart = new ColumnChart(tableau);
-		LineChart lineChart = new LineChart(tableau);
-		LineWithDotsChart lineDotsChart = new LineWithDotsChart(tableau);
 		ImgSVG newImgSVG = null;
-		boolean parametersChanged = false;
 		int currentMenu = 1;
-	
+
 		do {
-		try {
-		
-			displayMenu(currentMenu, scan);		
-            System.out.print("Votre choix: ");
-            int choice = scan.nextInt();
-            scan.nextLine();
-		
-		if (choice == 0 && currentMenu != 10) {
-			currentMenu -=1;
-			
-			if (currentMenu == 0) {
-				displayMenu(0, scan);
-			}
-			
-		} else if (choice == 0 && currentMenu == 10) {
-				currentMenu = 3;
-
-		} else if (choice == 1) {
-			 
-			System.out.println("Entrez le nom du fichier CSV: ");
-			String nomDuFichier = scan.nextLine();
-			String cheminFichier = "fichiers/" + nomDuFichier;
-			
 			try {
-               
-                tableau = TableauLu.lireFichierCSV(cheminFichier);
-                System.out.println("Fichier bien lu !");
-                currentMenu = 2;
-                
-			} catch 
-			 (FileNotFoundException e) {
-	            System.out.println("Le fichier est introuvable.");
-	            
-	        }
-			
-		}
-		
-		else if (choice == 2) {
 
-			selectedCharType = 0;
-			parametersChanged = false;
-			currentMenu = 4;
-		}
-		else if(choice == 3) {
+				displayMenu(currentMenu, scan);		
+				System.out.print("Votre choix: ");
+				int choice = scan.nextInt();
+				scan.nextLine();
 
-			displayMenu(10, scan);
-			System.out.println("Paramètres du graphique");
-            
-            if (selectedCharType == 1) {
-            	columnChart.updateParameters(scan);
-                newImgSVG = columnChart.generateSVGChart(tableau);
-                newImgSVG.updateFormsFromChart(columnChart);
-                parametersChanged = true;
-            }
-			else if (selectedCharType == 2) {
-				lineChart.updateParameters(scan);
-                newImgSVG = lineChart.generateSVGChart(tableau);
-                newImgSVG.updateFormsFromChart(lineChart);
-                parametersChanged = true;
+				if (isValidChoice(currentMenu, choice)) { 
+					if (choice == 0 && currentMenu != 10) {
+						currentMenu -=1;
+
+						if (currentMenu == 0) {
+							displayMenu(0, scan);
+						}
+
+					} else if (choice == 0 && currentMenu == 10) {
+						currentMenu = 3;
+
+					} else if (choice == 1) {
+
+						System.out.println("Entrez le nom du fichier CSV: ");
+						String nomDuFichier = scan.nextLine();
+						String cheminFichier = "fichiers/" + nomDuFichier;
+
+						try {
+							tableau = TableauLu.lireFichierCSV(cheminFichier);
+							System.out.println("Fichier bien lu !");
+							currentMenu = 2;
+
+						} catch (FileNotFoundException e) {
+							System.out.println("Le fichier est introuvable.");
+						}
+					}
+
+					else if (choice == 2) {
+						selectedCharType = 0;
+						parametersChanged = false;
+						currentMenu = 4;
+					}
+					else if(choice == 3) {
+
+						displayMenu(10, scan);
+						System.out.println("Paramètres du graphique");
+
+						if (axisChart != null) {
+							axisChart.updateParameters(scan);
+							newImgSVG = axisChart.generateSVGChart(tableau);
+							newImgSVG.updateFormsFromChart(axisChart);
+							parametersChanged = true;
+						}
+						currentMenu = 3;
+					}
+
+					else if (choice == 4) {
+						System.out.println("Entrez le nom du fichier SVG ");
+						String fileName = scan.nextLine();
+
+						if (axisChart != null) {
+							if (!parametersChanged) {
+								newImgSVG = axisChart.generateSVGChart(tableau);
+								newImgSVG.updateFormsFromChart(axisChart);
+							}
+							newImgSVG.saveImgSVG(fileName);
+							System.out.println("Fichier est généré et sauvegardé !");
+							newImgSVG = null;
+						}
+						currentMenu = 3;
+					}
+				} else {
+					throw new IllegalArgumentException();
+				}
+			} catch (IllegalArgumentException e) {
+				System.out.println("Entrée incorrecte (argument)");
+
+			} catch (InputMismatchException e) {
+				System.out.println("Entrée incorrecte (type)");
+				scan.next();
 			}
-			else if (selectedCharType == 3) {
-				
-				lineDotsChart.updateParameters(scan);
-                newImgSVG = lineDotsChart.generateSVGChart(tableau);
-                newImgSVG.updateFormsFromChart(lineDotsChart);
-                parametersChanged = true;
 
-			}
-            
-            currentMenu = 3;
-		}
-		
-		else if (choice == 4) {
-			System.out.println("Entrez le nom du fichier SVG ");
-			String fileName = scan.nextLine();
-			
-            if (selectedCharType == 1) {
-            	System.out.println(selectedCharType);
-            	if (!parametersChanged) {
-            		newImgSVG = columnChart.generateSVGChart(tableau);
-                    newImgSVG.updateFormsFromChart(columnChart);
-            	}
-            } else if (selectedCharType == 2) {
-            	if (!parametersChanged) {
-                newImgSVG = lineChart.generateSVGChart(tableau);
-                newImgSVG.updateFormsFromChart(lineChart);
-            	}
-            } else {
-            	if (!parametersChanged) {
-            		newImgSVG = lineDotsChart.generateSVGChart(tableau);
-                    newImgSVG.updateFormsFromChart(lineDotsChart);
-            	}
-            }
-                newImgSVG.saveImgSVG(fileName);
-                System.out.println("Fichier est généré et sauvegardé !");
-                newImgSVG = null;
-           
-            currentMenu = 3;
-		}
-
-		} catch (IllegalArgumentException e) {
-			System.out.println("Entrée incorrecte (argument)");
-			scan.next();
-			displayMenu(currentMenu, scan);
-			
-		}
-		catch (InputMismatchException e) {
-			System.out.println("Entrée incorrecte (type)");
-			scan.next();
-		}
-		
 		} 
 		while(currentMenu != 0);
 
 		scan.close();
-			
-		}
+
+	}
 }

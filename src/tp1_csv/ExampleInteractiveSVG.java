@@ -3,12 +3,12 @@ package tp1_csv;
 import java.io.*;
 import java.util.*;
 public class ExampleInteractiveSVG{
-	
+
 	private Scanner scan;
 	private ArrayList<Forme> formes = new ArrayList<>();
-	
+
 	public int[] saisirCoordonnees(){
-		
+
 		int[] res = new int[2];
 		System.out.print("Entrez la coordonnée X: ");
 		res[0] = scan.nextInt();
@@ -33,75 +33,75 @@ public class ExampleInteractiveSVG{
 			res = scan.nextInt();
 			scan.nextLine();
 			if (res<1 || res>3)
-	
-		System.out.println("Choix incorrect: " + res);
+
+				System.out.println("Choix incorrect: " + res);
 		} while(res<1 || res>3);
 		return res;
 	}
-	
+
 	public void creeImage(){
 		scan = new Scanner(System.in);
-		
+
 		int choix;
 		do{
 			choix = menu();
-			
+
 			if (choix == 1){
 				int[] coords = saisirCoordonnees();
-                System.out.print("Entrez le rayon du cercle: ");
-                int radius = scan.nextInt();
-                
-                scan.nextLine();
-                
-                String couleur = saisirCouleur();
-                
-                formes.add(new Circle("cercle", coords[0], coords[1], radius));
-			
-			} else if (choix == 2){
-				
-				int[] coords = saisirCoordonnees();
-				
-                System.out.print("Entrez la largeur (width) du rectangle: ");
-                int w = scan.nextInt();
-                
-                scan.nextLine();
-                
-                System.out.print("Entrez la hauteur (height) du rectangle: ");
-                int h = scan.nextInt();
+				System.out.print("Entrez le rayon du cercle: ");
+				int radius = scan.nextInt();
 
-                scan.nextLine();
-                
-                
-                formes.add(new Rectangle("rectangle", coords[0], coords[1], w, h));
+				scan.nextLine();
+
+				String couleur = saisirCouleur();
+
+				formes.add(new Circle("cercle", coords[0], coords[1], radius));
+
+			} else if (choix == 2){
+
+				int[] coords = saisirCoordonnees();
+
+				System.out.print("Entrez la largeur (width) du rectangle: ");
+				int w = scan.nextInt();
+
+				scan.nextLine();
+
+				System.out.print("Entrez la hauteur (height) du rectangle: ");
+				int h = scan.nextInt();
+
+				scan.nextLine();
+
+
+				formes.add(new Rectangle("rectangle", coords[0], coords[1], w, h));
 			}
-			
+
 			else if (choix == 3){
-				try{
+				try {
 					System.out.println("Entrez le nom de fichier ");
-				String fileName = scan.nextLine();
-				
-				PrintWriter pw = new PrintWriter(fileName);
-				pw.println("<?xml version=\"1.0\" encoding=\"utf-8\"?>");
-				pw.println("<svg xmlns=\"http://www.w3.org/2000/svg\"");
-				pw.println(" version=\"1.1\" width=\"300\" height=\"200\">");
-				
-				for (int i = 0; i < formes.size(); i++) {
-					pw.println(formes.get(i).toString());
-						
-				}
-				pw.println("</svg>");
-				pw.close();
-				}catch(FileNotFoundException ex){
-					System.out.println("Nom de fichier incorrect " + ex.getMessage());
+					String fileName = scan.nextLine();
+
+					PrintWriter pw = new PrintWriter(fileName);
+					pw.println("<?xml version=\"1.0\" encoding=\"utf-8\"?>");
+					pw.println("<svg xmlns=\"http://www.w3.org/2000/svg\"");
+					pw.println(" version=\"1.1\" width=\"300\" height=\"200\">");
+
+					for (int i = 0; i < formes.size(); i++) {
+						pw.println(formes.get(i).toString());
+
 					}
-				
+					pw.println("</svg>");
+					pw.close();
+				} catch (FileNotFoundException ex) {
+					System.out.println("Nom de fichier incorrect " + ex.getMessage());
+				}
+
 			}
-			
+
 		} while(choix !=3);
 	}
 
 	public static void main(String[] args){
-	ExampleInteractiveSVG isvg = new ExampleInteractiveSVG();
-	isvg.creeImage();
-}
+		ExampleInteractiveSVG isvg = new ExampleInteractiveSVG();
+		isvg.creeImage();
+	}
 }

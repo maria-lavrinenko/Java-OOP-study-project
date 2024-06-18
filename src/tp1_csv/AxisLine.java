@@ -1,7 +1,7 @@
 package tp1_csv;
 
 public class AxisLine extends Forme {
-	
+
 	protected double x2;
 	protected double y2;
 	private double strokeWidth = 2;
@@ -10,26 +10,21 @@ public class AxisLine extends Forme {
 		super("line", x, y);
 		this.x2 = x2;
 		this.y2 = y2;
-		
+
 	}
-	public void setVerticalAxis(double axisVert) {
-        if (x == x2) { 
-            this.y2 = axisVert + y; 
-        }
-    }
-	
+
 	public double getStrokeWidth() {
 		return strokeWidth;
 	}
 	public void setStrokeWidth(double strokeWidth) {
 		this.strokeWidth = strokeWidth;
 	}
-	
+
 	@Override
 	public String toString() {
-        return "<" + type + " x1=\"" + x + "\" y1=\"" + y + "\" x2=\"" + x2 + "\" y2=\"" + y2 +"\" stroke-width=\"" + strokeWidth + "\" stroke=\"" +color+ "\"/>";
-    }
-	
-	
-	
+		return "<" + type + " x1=\"" + x + "\" y1=\"" + y + "\" x2=\"" + x2 + "\" y2=\"" + y2 +"\" stroke-width=\"" + strokeWidth + "\" stroke=\"" +color+ "\"/>";
+	}
+
+
+
 }
